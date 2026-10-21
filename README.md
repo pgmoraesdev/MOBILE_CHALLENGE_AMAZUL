@@ -1,1 +1,3 @@
-# MOBILE_CHALLENGE_AMAZUL
+# projetox_mobile
+
+A new Flutter project.
