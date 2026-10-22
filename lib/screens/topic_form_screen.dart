@@ -8,7 +8,7 @@ class CategoryForm extends StatefulWidget {
 } 
 
 class _CategoryFormState extends State<CategoryForm> {
-
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -16,7 +16,7 @@ class _CategoryFormState extends State<CategoryForm> {
         title: const Text('Criar um novo tema'),
       ),  
       body: Center(
-        child: const Text(''),
+        child: const Text('Formulário de tema'),
         )
       );
   }
