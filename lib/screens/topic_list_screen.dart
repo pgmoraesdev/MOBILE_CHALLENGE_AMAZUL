@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../models/topic_model.dart';
 
 class TopicListScreen extends StatefulWidget {
   const TopicListScreen({super.key});
@@ -8,6 +9,8 @@ class TopicListScreen extends StatefulWidget {
 }
 
 class _TopicListScreenState extends State<TopicListScreen> {
+  final List<Topic> topics = [];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
