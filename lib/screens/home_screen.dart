@@ -163,6 +163,26 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  // ABRE A TELA DE RESULTADO
+  void showResult() {
+    // monta a lista só com os cenários que foram marcados
+    final List<Moment> selected = [];
+    for (final moment in moments) {
+      if (selectedMoments.contains(moment.id)) {
+        selected.add(moment);
+      }
+    }
+
+    // push: abre a tela POR CIMA da Home, então a seta de voltar
+    // aparece sozinha e as marcações continuam guardadas
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ResultScreen(selected: selected),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -239,11 +259,9 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Column(
                 children: [
                   ElevatedButton(
-                    //aq fala se nao tiver anda selecionado, ele nao vai ta ativo. se sim, tenho q fazer depois a tela q mostr ao resultado
-                    onPressed: selectedMoments.isEmpty ? null : () {
-                            // AÇÃO DE VER MEU DIA - tem q por aq codar isso aq dps 
-                            },
-
+                    // se nao tiver nada selecionado o botao fica desativado (null)
+                    // se tiver, ele chama o showResult que abre a tela de resultado
+                    onPressed: selectedMoments.isEmpty ? null : showResult,
 
                     style: ElevatedButton.styleFrom(
                       backgroundColor:
