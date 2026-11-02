@@ -66,6 +66,31 @@ class HomeScreen extends StatelessWidget {
               'Você está vivendo com tecnologia nuclear?',
               style: Theme.of(context).textTheme.headlineMedium,
             ),
+
+            //botoes de ação
+              const SizedBox(height: 20),
+              Center(
+                child: Column(
+                  children: [
+                    //ver meu dia
+                    ElevatedButton(
+                      onPressed: () {},
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color.fromARGB(255, 39, 31, 150),
+                        foregroundColor: Colors.white,
+                      ),
+                      child: const Text('Ver meu dia'),
+                    ),
+
+                    //ir para  jogos
+                    const SizedBox(height: 12),
+                    OutlinedButton(
+                      onPressed: () {},
+                      child: const Text('Pular e ir para os jogos'),
+                    ),
+                  ],
+                ),
+              ),
           ],
         ),
       ),
