@@ -6,40 +6,90 @@ class Moment {
   final int id;
   final String text;
   final IconData icon;
+  final String tema;
+  final String explicacao;
+
 
 //abaixo é um construtor, ele mostra oq é obrigatório(required) ter pra criar um moment e atribui a cada valor (this.)
   const Moment({
     required this.id,
     required this.text,
     required this.icon,
+    required this.tema,
+    required this.explicacao,
   });
 }
 
 const moments = [
   Moment(
     id: 1,
-    text: 'Usei um celular ou computador',
-    icon: LucideIcons.smartphone,
+    text: 'Carreguei o celular',
+    icon: LucideIcons.smartphoneCharging,
+    tema: 'Energia',
+    explicacao: 'A tomada está ligada a uma rede com várias fontes de energia, e as usinas nucleares são uma delas.',
   ),
   Moment(
     id: 2,
-    text: 'Fiz um exame ou cuidei da saúde',
-    icon: LucideIcons.heartPulse,
+    text: 'Acendi a luz',
+    icon: LucideIcons.lightbulb,
+    tema: 'Energia',
+    explicacao: 'Parte da eletricidade do Brasil vem de usinas nucleares, que operam junto com hidrelétricas e outras fontes.',
   ),
   Moment(
     id: 3,
-    text: 'Comi ou preparei alguma coisa',
-    icon: LucideIcons.utensils,
+    text: 'Fiz um raio-X ou exame de imagem',
+    icon: LucideIcons.bone,
+    tema: 'Saúde',
+    explicacao: 'Exames de imagem usam radiação para mostrar o interior do corpo sem cirurgia.',
   ),
   Moment(
     id: 4,
-    text: 'Usei transporte ou algum veículo',
-    icon: LucideIcons.car,
+    text: 'Fui ao dentista',
+    icon: LucideIcons.smile,
+    tema: 'Saúde',
+    explicacao: 'A radiografia odontológica usa doses muito baixas de radiação para enxergar dentes e raízes.',
   ),
   Moment(
     id: 5,
-    text: 'Assisti a algo ou ouvi música',
-    icon: LucideIcons.headphones,
+    text: 'Usei seringa ou curativo embalado',
+    icon: LucideIcons.syringe,
+    tema: 'Saúde',
+    explicacao: 'Muitos materiais médicos descartáveis são esterilizados por radiação, já dentro da embalagem.',
+  ),
+  Moment(
+    id: 6,
+    text: 'Comi banana',
+    icon: LucideIcons.banana,
+    tema: 'Alimentos',
+    explicacao: 'A banana contém potássio-40, um isótopo natural. A dose é mínima e inofensiva.',
+  ),
+  Moment(
+    id: 7,
+    text: 'Comi algo embalado que dura muito',
+    icon: LucideIcons.package,
+    tema: 'Alimentos',
+    explicacao: 'A irradiação é uma técnica regulamentada para conservar certos alimentos e reduzir microrganismos.',
+  ),
+  Moment(
+    id: 8,
+    text: 'Comi arroz, feijão ou verduras',
+    icon: LucideIcons.wheat,
+    tema: 'Alimentos',
+    explicacao: 'Algumas variedades de plantas foram criadas com radiação, que também ajuda a controlar pragas.',
+  ),
+  Moment(
+    id: 9,
+    text: 'Tenho detector de fumaça em casa',
+    icon: LucideIcons.siren,
+    tema: 'Casa',
+    explicacao: 'Alguns modelos usam uma fonte radioativa minúscula e selada para detectar fumaça.',
+  ),
+  Moment(
+    id: 10,
+    text: 'Vi o mar ou um navio',
+    icon: LucideIcons.ship,
+    tema: 'Mar',
+    explicacao: 'O Programa Nuclear da Marinha desenvolve tecnologia para propulsão naval e para o ciclo do combustível.',
   ),
 ];
 
@@ -213,6 +263,112 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: const Text(
                       'Pular e ir para os jogos',
                     ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+
+      bottomNavigationBar: const Menu(atual: 0),
+    );
+  }
+}
+
+// TELA RESULTADO DO MEU DIA
+// recebe a lista dos cenários que a pessoa marcou na Home.
+// é StatelessWidget porque nada muda aqui, ela só mostra os dados
+class ResultScreen extends StatelessWidget {
+  final List<Moment> selected;
+
+  const ResultScreen({
+    super.key,
+    required this.selected,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    // descobre os temas SEM repetir (Energia, Saúde...)
+    final List<String> temas = [];
+    for (final moment in selected) {
+      if (!temas.contains(moment.tema)) {
+        temas.add(moment.tema);
+      }
+    }
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Header(),
+      ),
+
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text('Hoje o átomo esteve em'),
+
+            // o número de cenários marcados, bem grande
+            Text(
+              '${selected.length}',
+              style: Theme.of(context).textTheme.displayLarge,
+            ),
+
+            // singular ou plural, dependendo da quantidade
+            Text(
+              selected.length == 1
+                  ? 'momento do seu dia'
+                  : 'momentos do seu dia',
+              style: Theme.of(context).textTheme.headlineSmall,
+            ),
+
+            const SizedBox(height: 8),
+
+            // join junta os temas num texto só: "Energia, Saúde"
+            Text('Temas: ${temas.join(', ')}'),
+
+            const SizedBox(height: 12),
+
+            // LISTA DOS CENÁRIOS MARCADOS, cada um com sua explicação
+            Expanded(
+              child: ListView(
+                children: selected.map((moment) {
+                  return Card(
+                    child: ListTile(
+                      leading: Icon(moment.icon),
+                      title: Text(moment.text),
+                      subtitle: Text(moment.explicacao),
+                    ),
+                  );
+                }).toList(),
+              ),
+            ),
+
+            const SizedBox(height: 20),
+
+            Center(
+              child: Column(
+                children: [
+                  ElevatedButton(
+                    // pop: fecha esta tela e volta para a Home
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color.fromARGB(255, 39, 31, 150),
+                      foregroundColor: Colors.white,
+                    ),
+                    child: const Text('Fazer de novo'),
+                  ),
+
+                  const SizedBox(height: 12),
+
+                  OutlinedButton(
+                    onPressed: () {
+                      // AÇÃO DE IR PARA OS JOGOS
+                    },
+                    child: const Text('Ir para os jogos'),
                   ),
                 ],
               ),
