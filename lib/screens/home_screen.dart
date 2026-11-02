@@ -99,7 +99,20 @@ class Header extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Text('Damy');
+    // Row coloca os itens lado a lado: logo + nome do app
+    return Row(
+      children: [
+        // pra funciona aq tive que declarar o caminho no pubsec.yaml
+        Image.asset(
+          'web/icons/damyicon.png',
+          height: 32, 
+        ),
+
+        const SizedBox(width: 8), // espaço entre a logo e o texto
+
+        const Text('Damy'),
+      ],
+    );
   }
 }
 
