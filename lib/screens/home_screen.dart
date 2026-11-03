@@ -1,3 +1,4 @@
+import 'package:damy/screens/topic_list_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_flutter/lucide_flutter.dart';
 
@@ -136,19 +137,25 @@ class Menu extends StatelessWidget {
         // se tocou na aba onde já está, não faz nada
         if (index == atual) return;
 
-        if (index == 0) {
-          // pushReplacement: vai para a nova tela SUBSTITUINDO a atual
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => const HomeScreen()),
-          );
-        } else if (index == 1) {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => const GamesScreen()),
-          );
+        switch (index) {
+          case 0:
+            // pushReplacement: vai para a nova tela SUBSTITUINDO a atual
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const HomeScreen()),
+            );
+          case 1:
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const GamesScreen()),
+            );
+          case 3:
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const TopicListScreen()),
+            );
         }
-        // index 2 (Palestras) e 3 (Tema): ligar com parte do paulo
+       
       },
 
       destinations: const [
