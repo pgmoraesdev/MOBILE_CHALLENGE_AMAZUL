@@ -4,6 +4,9 @@ import 'package:lucide_flutter/lucide_flutter.dart';
 // importa o arquivo da home para poder usar o header e o menu aqui também, mais pra frente a gente faz virarem componentes
 import 'home_screen.dart';
 
+// importa o quiz para poder abrir ele daqui
+import 'game_quiz_screen.dart';
+
 // JOGOS DISPONÍVEIS
 class Game {
   final String name;
@@ -85,7 +88,16 @@ class GamesScreen extends StatelessWidget {
                     // InkWell deixa o card com efeito bonitinho ao clicar nele
                     child: InkWell(
                       // se o jogo não estiver disponível, esse efeito nao vai funcionar ao clicar e nao vai clicar
-                      onTap: game.available? () {}: null,
+                      onTap: game.available
+                          ? () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const QuizScreen(),
+                                ),
+                              );
+                            }
+                          : null,
 
                       child: Padding(
                         padding: const EdgeInsets.all(12),

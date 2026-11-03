@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_flutter/lucide_flutter.dart';
 
+// importa a tela de jogos para poder abrir ela daqui
+import 'games_screen.dart';
+
 // CENÁRIOS DO DIA
 class Moment {
   final int id;
@@ -99,10 +102,8 @@ class Header extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Row coloca os itens lado a lado: logo + nome do app
     return Row(
       children: [
-        // pra funciona aq tive que declarar o caminho no pubsec.yaml
         Image.asset(
           'web/icons/damyicon.png',
           height: 32, 
@@ -129,6 +130,27 @@ class Menu extends StatelessWidget {
   Widget build(BuildContext context) {
     return NavigationBar(
       selectedIndex: atual,
+
+      // quando toca numa aba, o Flutter entrega o número dela em "index"
+      onDestinationSelected: (index) {
+        // se tocou na aba onde já está, não faz nada
+        if (index == atual) return;
+
+        if (index == 0) {
+          // pushReplacement: vai para a nova tela SUBSTITUINDO a atual
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const HomeScreen()),
+          );
+        } else if (index == 1) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const GamesScreen()),
+          );
+        }
+        // index 2 (Palestras) e 3 (Tema): ligar com parte do paulo
+      },
+
       destinations: const [
         NavigationDestination(
           icon: Icon(LucideIcons.sun),
@@ -185,9 +207,6 @@ class _HomeScreenState extends State<HomeScreen> {
         selected.add(moment);
       }
     }
-
-    // push: abre a tela POR CIMA da Home, então a seta de voltar
-    // aparece sozinha e as marcações continuam guardadas
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -289,7 +308,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
                   OutlinedButton(
                     onPressed: () {
-                      // AÇÃO DE IR PARA OS JOGOS
+                      // vai para a tela de jogos, substituindo a Home
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const GamesScreen(),
+                        ),
+                      );
                     },
                     child: const Text(
                       'Pular e ir para os jogos',
@@ -397,7 +422,13 @@ class ResultScreen extends StatelessWidget {
 
                   OutlinedButton(
                     onPressed: () {
-                      // AÇÃO DE IR PARA OS JOGOS
+                      // vai para a tela de jogos, substituindo o resultado
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const GamesScreen(),
+                        ),
+                      );
                     },
                     child: const Text('Ir para os jogos'),
                   ),
