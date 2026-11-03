@@ -22,6 +22,11 @@ class _TopicListScreenState extends State<TopicListScreen> {
 
     if (topic != null && mounted) {
       setState(() => topics.add(topic));
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(
+          SnackBar(content: Text('Tema "${topic.titulo}" criado com sucesso.')),
+        );
     }
   }
 
