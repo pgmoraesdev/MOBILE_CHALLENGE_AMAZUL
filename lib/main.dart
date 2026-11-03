@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'screens/home_screen.dart';
+import 'screens/games_screen.dart';
 
 void main() {
   runApp(const MainApp());
@@ -35,7 +36,7 @@ class MainApp extends StatelessWidget {
             ),
           ),
         ),
-        home: const HomeScreen(),
+        home: const GamesScreen(),
       );
   }
 }
