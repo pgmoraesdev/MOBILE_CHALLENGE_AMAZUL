@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_flutter/lucide_flutter.dart';
-
 import 'home_screen.dart';
 
 // PERGUNTAS DO QUIZ
@@ -62,12 +61,13 @@ class QuizScreen extends StatefulWidget {
 // guarda as infos que mudam durante o quiz
 class _QuizScreenState extends State<QuizScreen> {
   int current = 0; // posição da pergunta atual
-  int selected = -1; // opção escolhida (-1 é pra quando ainda não escolheu nada)
+  int selected = -1; // opção escolhida (-1 = ainda não escolheu nada)
   int score = 0; 
+  bool finished = false; // mostra o resultado quando acaba o quiz
 
   // QUANDO A PESSOA TOCA EM UMA OPÇÃO
   void answer(int index) {
-    // se já respondeu essa pergunta, ignora o toque (return sai da função)
+    // se já respondeu ignora
     if (selected != -1) return;
 
     setState(() {
@@ -79,16 +79,90 @@ class _QuizScreenState extends State<QuizScreen> {
     });
   }
 
-  // PRÓXIMA PERGUNTA
+  // PASSA PARA A PRÓXIMA PERGUNTA (ou termina, se era a última)
   void next() {
     setState(() {
-      current++;
-      selected = -1; // volta pra nenhuma pergunta selecionada
+      if (current == quizQuestions.length - 1) {
+        finished = true;
+      } else {
+        current++;
+        selected = -1; // reseta a opcao escolhida ja que a pessoa n escolheu ainda
+      }
+    });
+  }
+
+  //RESET QUIZ: 
+  void restart() {
+    setState(() {
+      current = 0;
+      selected = -1;
+      score = 0;
+      finished = false;
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    // SE ACABOU, MOSTRA A TELA DE RESULTADO
+    if (finished) {
+      return Scaffold(
+        appBar: AppBar(
+          title: const Header(),
+        ),
+
+        body: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text('Você acertou'),
+
+                Text(
+                  '$score de ${quizQuestions.length}',
+                  style: Theme.of(context).textTheme.displayLarge,
+                ),
+
+                const SizedBox(height: 8),
+
+                // mensagem diferente dependendo da pontuação
+                Text(
+                  score >= 4
+                      ? 'Você já manda bem no assunto!'
+                      : 'Continue explorando, o assunto está em tudo!',
+                  textAlign: TextAlign.center,
+                ),
+
+                const SizedBox(height: 24),
+
+                ElevatedButton(
+                  onPressed: restart,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color.fromARGB(255, 39, 31, 150),
+                    foregroundColor: Colors.white,
+                  ),
+                  child: const Text('Jogar de novo'),
+                ),
+
+                const SizedBox(height: 12),
+
+                OutlinedButton(
+                  // pop: fecha o quiz e volta para a tela de jogos
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text('Voltar aos jogos'),
+                ),
+              ],
+            ),
+          ),
+        ),
+
+        bottomNavigationBar: const Menu(atual: 1),
+      );
+    }
+
+    // SE NÃO ACABOU, MOSTRA A PERGUNTA
     final question = quizQuestions[current];
     final answered = selected != -1; // true se já respondeu
 
@@ -102,7 +176,7 @@ class _QuizScreenState extends State<QuizScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // progresso e pontuação 
+            // progresso à esquerda, pontuação à direita
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -120,7 +194,7 @@ class _QuizScreenState extends State<QuizScreen> {
 
             const SizedBox(height: 16),
 
-            // LISTA das OPÇÕES
+            // LISTA DAS OPÇÕES
             Expanded(
               child: ListView.builder(
                 itemCount: question.options.length,
@@ -129,21 +203,27 @@ class _QuizScreenState extends State<QuizScreen> {
                   final isChosen = index == selected;
 
                   return Card(
-                    // antes de responder a cor fica normal
+                    // antes de responder: cor normal
                     // depois: a certa fica verde, a errada escolhida fica vermelha
-                    color: !answered ? null : isCorrect ? Colors.green.shade100 : isChosen ? Colors.red.shade100 : null,
+                    color: !answered
+                        ? null
+                        : isCorrect
+                            ? Colors.green.shade100
+                            : isChosen
+                                ? Colors.red.shade100
+                                : null,
 
                     child: ListTile(
                       title: Text(question.options[index]),
 
-                      // icon de certo e errado
+                      // ícone de certo ou errado depois de responder
                       trailing: answered && isCorrect
                           ? const Icon(LucideIcons.circleCheck, color: Colors.green)
                           : answered && isChosen
                               ? const Icon(LucideIcons.circleX, color: Colors.red)
                               : null,
 
-                      // ao tocar, chama a resposta passando a posição da opção
+                      // ao tocar, chama o answer passando a posição da opção
                       onTap: () {
                         answer(index);
                       },
@@ -167,18 +247,18 @@ class _QuizScreenState extends State<QuizScreen> {
 
             Center(
               child: ElevatedButton(
-                // desativado se não respondeu ou se for a última pergunta
-                // (a última vai ganhar o resultado - a fazer aida)
-                onPressed: !answered || current == quizQuestions.length - 1
-                    ? null
-                    : next,
+                // desativado até a pessoa responder
+                onPressed: answered ? next : null,
 
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color.fromARGB(255, 39, 31, 150),
                   foregroundColor: Colors.white,
                 ),
 
-                child: const Text('Próxima'),
+                // na última pergunta o texto muda
+                child: Text(
+                  current == quizQuestions.length - 1 ? 'Ver resultado' : 'Próxima',
+                ),
               ),
             ),
           ],
