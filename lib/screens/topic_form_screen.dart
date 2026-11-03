@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import '../models/topic_model.dart';
 
 class CategoryForm extends StatefulWidget {
-  const CategoryForm({super.key});
+  final Topic? topic;
+
+  const CategoryForm({super.key, this.topic});
 
   @override
   State<CategoryForm> createState() => _CategoryFormState();
@@ -13,6 +15,13 @@ class _CategoryFormState extends State<CategoryForm> {
   final _formKey = GlobalKey<FormState>();
   final _titleController = TextEditingController();
   final _descriptionController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _titleController.text = widget.topic?.titulo ?? '';
+    _descriptionController.text = widget.topic?.descricao ?? '';
+  }
 
   @override
   void dispose() {
@@ -36,7 +45,9 @@ class _CategoryFormState extends State<CategoryForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Criar um novo tema')),
+      appBar: AppBar(
+        title: Text(widget.topic == null ? 'Criar um novo tema' : 'Editar tema'),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Form(
@@ -64,7 +75,7 @@ class _CategoryFormState extends State<CategoryForm> {
               const SizedBox(height: 24),
               ElevatedButton(
                 onPressed: _saveTopic,
-                child: const Text('Salvar tema'),
+                child: Text(widget.topic == null ? 'Salvar tema' : 'Salvar alterações'),
               ),
             ],
           ),

@@ -30,6 +30,24 @@ class _TopicListScreenState extends State<TopicListScreen> {
     }
   }
 
+  Future<void> _editTopic(int index) async {
+    final updatedTopic = await Navigator.push<Topic>(
+      context,
+      MaterialPageRoute(
+        builder: (context) => CategoryForm(topic: topics[index]),
+      ),
+    );
+
+    if (updatedTopic != null && mounted) {
+      setState(() => topics[index] = updatedTopic);
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(
+          SnackBar(content: Text('Tema "${updatedTopic.titulo}" atualizado.')),
+        );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,6 +64,11 @@ class _TopicListScreenState extends State<TopicListScreen> {
                   child: ListTile(
                     title: Text(topic.titulo),
                     subtitle: Text(topic.descricao),
+                    trailing: IconButton(
+                      tooltip: 'Editar tema',
+                      icon: const Icon(Icons.edit_outlined),
+                      onPressed: () => _editTopic(index),
+                    ),
                   ),
                 );
               },
