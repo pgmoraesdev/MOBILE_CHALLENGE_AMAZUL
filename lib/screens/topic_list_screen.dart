@@ -51,7 +51,19 @@ class _TopicListScreenState extends State<TopicListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Temas')),
+      appBar: AppBar(
+        title: const Header(),
+        bottom: const PreferredSize(
+          preferredSize: Size.fromHeight(28),
+          child: Padding(
+            padding: EdgeInsets.only(left: 16, bottom: 8),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Text('Temas'),
+            ),
+          ),
+        ),
+      ),
       body: topics.isEmpty
           ? const Center(child: Text('Nenhum tema criado ainda.'))
           : ListView.separated(

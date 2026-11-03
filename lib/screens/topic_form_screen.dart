@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../models/topic_model.dart';
+import 'home_screen.dart';
 
 class CategoryForm extends StatefulWidget {
   final Topic? topic;
@@ -46,7 +47,19 @@ class _CategoryFormState extends State<CategoryForm> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.topic == null ? 'Criar um novo tema' : 'Editar tema'),
+        title: const Header(),
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(28),
+          child: Padding(
+            padding: const EdgeInsets.only(left: 16, bottom: 8),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                widget.topic == null ? 'Criar um novo tema' : 'Editar tema',
+              ),
+            ),
+          ),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
