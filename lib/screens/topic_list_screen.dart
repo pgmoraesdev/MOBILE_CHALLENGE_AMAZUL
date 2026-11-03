@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../models/topic_model.dart';
+import '../repositories/topic_repository.dart';
 import 'home_screen.dart';
 import 'topic_form_screen.dart';
 
@@ -12,7 +13,9 @@ class TopicListScreen extends StatefulWidget {
 }
 
 class _TopicListScreenState extends State<TopicListScreen> {
-  final List<Topic> topics = [];
+  final _repository = TopicRepository.instance;
+
+  List<Topic> get topics => _repository.topics;
 
   Future<void> _createTopic() async {
     final topic = await Navigator.push<Topic>(
@@ -21,7 +24,7 @@ class _TopicListScreenState extends State<TopicListScreen> {
     );
 
     if (topic != null && mounted) {
-      setState(() => topics.add(topic));
+      setState(() => _repository.add(topic));
       ScaffoldMessenger.of(context)
         ..hideCurrentSnackBar()
         ..showSnackBar(
@@ -39,7 +42,7 @@ class _TopicListScreenState extends State<TopicListScreen> {
     );
 
     if (updatedTopic != null && mounted) {
-      setState(() => topics[index] = updatedTopic);
+      setState(() => _repository.update(index, updatedTopic));
       ScaffoldMessenger.of(context)
         ..hideCurrentSnackBar()
         ..showSnackBar(
