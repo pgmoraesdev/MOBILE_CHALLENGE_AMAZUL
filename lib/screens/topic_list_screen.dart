@@ -52,39 +52,49 @@ class _TopicListScreenState extends State<TopicListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Header(),
-        bottom: const PreferredSize(
-          preferredSize: Size.fromHeight(28),
-          child: Padding(
-            padding: EdgeInsets.only(left: 16, bottom: 8),
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Text('Temas'),
+        title: const Header(),        
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Temas',
+              style: Theme.of(context).textTheme.headlineMedium,
             ),
-          ),
+            const SizedBox(height: 8),
+            const Text(
+              'Explore temas ligados à tecnologia nuclear. Eles vão orientar '
+              'os jogos e outros conteúdos do aplicativo.',
+            ),
+            const SizedBox(height: 16),
+            Expanded(
+              child: topics.isEmpty
+                  ? const Center(child: Text('Nenhum tema criado ainda.'))
+                  : ListView.separated(
+                      itemCount: topics.length,
+                      separatorBuilder: (context, index) =>
+                          const SizedBox(height: 8),
+                      itemBuilder: (context, index) {
+                        final topic = topics[index];
+                        return Card(
+                          child: ListTile(
+                            title: Text(topic.titulo),
+                            subtitle: Text(topic.descricao),
+                            trailing: IconButton(
+                              tooltip: 'Editar tema',
+                              icon: const Icon(Icons.edit_outlined),
+                              onPressed: () => _editTopic(index),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+            ),
+          ],
         ),
       ),
-      body: topics.isEmpty
-          ? const Center(child: Text('Nenhum tema criado ainda.'))
-          : ListView.separated(
-              padding: const EdgeInsets.all(16),
-              itemCount: topics.length,
-              separatorBuilder: (context, index) => const SizedBox(height: 8),
-              itemBuilder: (context, index) {
-                final topic = topics[index];
-                return Card(
-                  child: ListTile(
-                    title: Text(topic.titulo),
-                    subtitle: Text(topic.descricao),
-                    trailing: IconButton(
-                      tooltip: 'Editar tema',
-                      icon: const Icon(Icons.edit_outlined),
-                      onPressed: () => _editTopic(index),
-                    ),
-                  ),
-                );
-              },
-            ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: _createTopic,
         icon: const Icon(Icons.add),
