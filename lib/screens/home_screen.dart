@@ -4,6 +4,7 @@ import 'package:lucide_flutter/lucide_flutter.dart';
 
 // importa a tela de jogos para poder abrir ela daqui
 import 'games_screen.dart';
+import 'session_screen.dart';
 
 // CENÁRIOS DO DIA
 class Moment {
@@ -149,6 +150,11 @@ class Menu extends StatelessWidget {
               context,
               MaterialPageRoute(builder: (context) => const GamesScreen()),
             );
+          case 2:
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const SessionScreen()),
+            );
           case 3:
             Navigator.pushReplacement(
               context,
@@ -168,8 +174,8 @@ class Menu extends StatelessWidget {
           label: 'Jogos',
         ),
         NavigationDestination(
-          icon: Icon(LucideIcons.mic),
-          label: 'Palestras',
+          icon: Icon(LucideIcons.joystick),
+          label: 'Sessão',
         ),
         NavigationDestination(
           icon: Icon(LucideIcons.settings),
