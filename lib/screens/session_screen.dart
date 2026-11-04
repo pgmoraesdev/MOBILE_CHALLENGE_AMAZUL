@@ -40,6 +40,17 @@ class _SessionScreenState extends State<SessionScreen> {
       return;
     }
 
+    final session = _repository.sessions.last;
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(
+        SnackBar(
+          content: Text(
+            'Partida "${session.name}" criada! Código da sala: ${session.code}',
+          ),
+        ),
+      );
+
     _nameController.clear();
     _participantsController.clear();
     FocusScope.of(context).unfocus();
