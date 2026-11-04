@@ -55,3 +55,6 @@ flutter run -d chrome
 - Navigator para a navegação entre telas.
 - StatefulWidget e setState para o gerenciamento de estado.
 - Flutter Test e Flutter Lints para testes e análise de código.
+
+## Link para o vídeo demonstrativo
+https://youtu.be/8DYRIWMHZVA
